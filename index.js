@@ -28,6 +28,10 @@ const connect = async () => {
 connect();
 
 
+app.get('/', async (req, res) => {
+  res.send('Prueba')
+})
+
 app.get('/invitados', async (req, res) => {
   try {
     const result = await db.sql`
