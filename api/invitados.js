@@ -32,4 +32,29 @@ app.get('/api', async (req, res) => {
   res.send('Prueba')
 })
 
+app.get('/api/invitados', async (req, res) => {
+  try {
+    const result = await db.sql`
+    SELECT
+      i.id AS ID,
+      i.nombre AS invitado_nombre, 
+      i.apellido AS invitado_apellido, 
+      i.celular, 
+      i.nombrefamilia, 
+      i.niños, 
+      a.nombre AS acompanante_nombre, 
+      a.apellido AS acompanante_apellido,
+      i.confirmacion AS confirmacion
+    FROM 
+      acompañante AS a
+    FULL JOIN 
+      invitado AS i ON i.id = a.invitado_id;
+    `;
+    res.json(result);
+  } catch (error) {
+    console.error('Error al obtener los invitados:', error);
+    res.status(500).json({ error: 'Error al obtener los invitados' });
+  }
+})
+
 module.exports = app;
