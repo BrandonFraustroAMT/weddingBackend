@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const { Database } = require('@sqlitecloud/drivers');
 const cors = require('cors');
@@ -13,7 +14,7 @@ app.use(express.json());
 app.use(cors());
 
 
-const db = new Database('sqlitecloud://niixaltqiz.sqlite.cloud:8860?apikey=zM4z5b4LDtTFaXdFFQg3mbd0lquNiQmpR2Orh4gg870')
+const db = new Database(process.env.DB)
 const connect = async () => {
   try {
     await db.sql`USE DATABASE wedding-database;`;
