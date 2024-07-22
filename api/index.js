@@ -28,11 +28,11 @@ const connect = async () => {
 connect();
 
 
-app.get('/', async (req, res) => {
+app.get('/api', async (req, res) => {
   res.send('Prueba')
 })
 
-app.get('/invitados', async (req, res) => {
+app.get('/api/invitados', async (req, res) => {
   try {
     const result = await db.sql`
     SELECT
@@ -57,7 +57,7 @@ app.get('/invitados', async (req, res) => {
   }
 })
 
-app.put('/invitados/:id', async (req, res) => {
+app.put('/api/invitados/:id', async (req, res) => {
   const id = parseInt(req.params.id, 10);
   const { 
     nombre, apellido, celular, nombrefamilia, niños, confirmacion
