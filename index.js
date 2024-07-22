@@ -29,7 +29,22 @@ connect();
 
 app.get('/invitados', async (req, res) => {
   try {
-    const result = await db.sql`SELECT * FROM invitados;`;
+    const result = await db.sql`
+    SELECT
+      i.id AS ID,
+      i.nombre AS invitado_nombre, 
+      i.apellido AS invitado_apellido, 
+      i.celular, 
+      i.nombrefamilia, 
+      i.niños, 
+      a.nombre AS acompanante_nombre, 
+      a.apellido AS acompanante_apellido,
+      i.confirmacion AS confirmacion
+    FROM 
+      acompañante AS a
+    FULL JOIN 
+      invitado AS i ON i.id = a.invitado_id;
+    `;
     res.json(result);
   } catch (error) {
     console.error('Error al obtener los invitados:', error);
@@ -37,46 +52,19 @@ app.get('/invitados', async (req, res) => {
   }
 })
 
-app.get('/invitados/:id', async (req, res) => {
-  const id = parseInt(req.params.id, 10);
-  try {
-    const result = await db.sql`SELECT * FROM invitados WHERE id = ${id};`;
-    console.log(result);
-    if (result.length > 0) {
-      res.json(result[0]);
-    } else {
-      res.status(404).json({ error: 'Invitado no encontrado' });
-    }
-  } catch (error) {
-    console.error('Error al obtener el invitado:', error);
-    res.status(500).json({ error: 'Error al obtener el invitado' });
-  }
-})
-app.get('/invitados/:id', async (req, res) => {
-  const id = parseInt(req.params.id, 10);
-  try {
-    const result = await db.sql`SELECT * FROM invitados WHERE id = ${id};`;
-    console.log(result);
-    if (result.length > 0) {
-      res.json(result[0]);
-    } else {
-      res.status(404).json({ error: 'Invitado no encontrado' });
-    }
-  } catch (error) {
-    console.error('Error al obtener el invitado:', error);
-    res.status(500).json({ error: 'Error al obtener el invitado' });
-  }
-})
-
 app.put('/invitados/:id', async (req, res) => {
   const id = parseInt(req.params.id, 10);
-  const { nombre, acompañante, niños, confirmacion } = req.body;
+  const { 
+    nombre, apellido, celular, nombrefamilia, niños, confirmacion
+  } = req.body;
   try {
     const result = await db.sql`
-      UPDATE invitados
+      UPDATE invitado
       SET 
         nombre = ${nombre},
-        acompañante = ${acompañante},
+        apellido = ${apellido},
+        celular = ${celular},
+        nombrefamilia = ${nombrefamilia},
         niños = ${niños},
         confirmacion = ${confirmacion}
       WHERE id = ${id};
